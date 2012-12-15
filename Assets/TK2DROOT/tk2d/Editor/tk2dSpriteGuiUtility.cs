@@ -124,10 +124,25 @@ public static class tk2dSpriteGuiUtility
 	{
 		BuildLookupIndex(false);
 		
-		GameObject scgo = AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(allSpriteCollections[0].spriteCollectionDataGUID), typeof(GameObject)) as GameObject;
-		return scgo.GetComponent<tk2dSpriteCollectionData>();
+		foreach (tk2dSpriteCollectionIndex indexEntry in allSpriteCollections)
+		{
+			if (!indexEntry.managedSpriteCollection && indexEntry.spriteNames != null)
+			{
+				foreach (string name in indexEntry.spriteNames)
+				{
+					if (name != null && name.Length > 0)
+					{
+						GameObject scgo = AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(indexEntry.spriteCollectionDataGUID), typeof(GameObject)) as GameObject;
+						return scgo.GetComponent<tk2dSpriteCollectionData>();
+					}
+				}
+			}
+		}
+		
+		Debug.LogError("Unable to find any sprite collections.");
+		return null;
 	}
-	
+		
 	static void BuildLookupIndex(bool force)
 	{
 		if (force)

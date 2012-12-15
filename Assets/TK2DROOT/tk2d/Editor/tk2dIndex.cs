@@ -146,6 +146,7 @@ public class tk2dIndex : ScriptableObject
 
 	void PruneGenericList(ref List<tk2dGenericIndexItem> list)
 	{
+#if UNITY_EDITOR
 		for (int i = 0; i < list.Count; ++i)
 		{
 			if (list[i] != null && AssetDatabase.GUIDToAssetPath(list[i].assetGUID).Length == 0)
@@ -153,6 +154,7 @@ public class tk2dIndex : ScriptableObject
 
 		}
 		list.RemoveAll(item => item == null);
+#endif
 	}
 
 	public tk2dGenericIndexItem[] GetSpriteAnimations()
