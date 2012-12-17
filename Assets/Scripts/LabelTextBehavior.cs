@@ -42,6 +42,7 @@ public class LabelTextBehavior : MonoBehaviour
         }
         else if (this.LabelType == global::LabelType.Secular)
         {
+            //UnityEngine.Debug.Log("Setitn fucking color to blue");
             this.textMesh.color = Color.blue;
             this.textMesh.color2 = Color.blue;
             this.textMesh.useGradient = true;

@@ -22,13 +22,20 @@ public class ReligiosityBarScript : MonoBehaviour
 
     void Awake()
     {
-        this.religiositySprite = this.gameObject.transform.GetChild(1).GetComponent<tk2dSprite>();
-        this.secularSprite = this.gameObject.transform.GetChild(0).GetComponent<tk2dSprite>();
+        this.religiositySprite = this.gameObject.transform.FindChild("ReligiosityBarSprite").GetComponent<tk2dSprite>();
+
+        if (this.religiositySprite == null)
+        {
+            Debug.LogError("ReligiositySprite is NULL");
+        }
+
+        this.secularSprite = this.gameObject.transform.FindChild("SecularBarSprite").GetComponent<tk2dSprite>();
         this.religiositySpriteScale = new Vector3(1, 1, 1);
 
-        Debug.Log("religiositySprite bounds: " + this.religiositySprite.GetBounds());
+       // Debug.Log("religiositySprite bounds: " + this.religiositySprite.GetBounds());
+       // Debug.Log("secularSprite bounds: " + this.secularSprite.GetBounds());
 
-        this.OriginalWidth = this.religiositySprite.GetBounds().size.x * this.religiositySprite.transform.localScale.x;
+        this.OriginalWidth = this.secularSprite.GetBounds().size.x * this.secularSprite.transform.localScale.x;
     }
 
 	// Use this for initialization
@@ -58,7 +65,8 @@ public class ReligiosityBarScript : MonoBehaviour
             this.religiositySprite.scale = this.religiositySpriteScale;
             float newReligiositySpriteWidth = this.religiositySpriteScale.x * this.OriginalWidth;
 
-            float newX = -(-OriginalWidth / 2f) + newReligiositySpriteWidth / 2f;
+            float newX = -(OriginalWidth / 2f) + newReligiositySpriteWidth / 2f;
+            //float newX = -(190f/2f) + newReligiositySpriteWidth / 2f;
 
             this.religiositySprite.gameObject.transform.localPosition = new Vector3(newX, 0, -1);
         }

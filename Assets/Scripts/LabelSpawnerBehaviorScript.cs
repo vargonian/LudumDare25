@@ -21,14 +21,20 @@ public class LabelSpawnerBehaviorScript : MonoBehaviour {
     {
         Vector3 spawnPosition = this.gameObject.transform.position;
 
-        Debug.Log("Spawn position: " + spawnPosition);
-
-        this.labelSpawner.GetComponent<LabelSpawnerObjectBehavior>().SpawnReligiosityIncrease(this.gameObject, amount);
+        if (amount > 0)
+        {
+            this.labelSpawner.GetComponent<LabelSpawnerObjectBehavior>().SpawnReligiosityIncrease(this.gameObject, amount);
+        }
     }
 
     public void SpawnSecularGain(float amount)
     {
+        Vector3 spawnPosition = this.gameObject.transform.position;
 
+        if (amount > 0)
+        {
+            this.labelSpawner.GetComponent<LabelSpawnerObjectBehavior>().SpawnSecularIncrease(this.gameObject, amount);
+        }
     }
 
     public void SpawnCashGain(float amount)

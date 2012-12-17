@@ -25,7 +25,8 @@ public class CiviliansLayerBehavior : MonoBehaviour
     {
         get
         {
-            return -1891f;
+            //return -1891f;
+            return -250f;
         }
     }
 
@@ -33,7 +34,8 @@ public class CiviliansLayerBehavior : MonoBehaviour
     {
         get
         {
-            return 1077f;
+           // return 1077f;
+            return 700f;
         }
     }
 
@@ -68,6 +70,8 @@ public class CiviliansLayerBehavior : MonoBehaviour
             civilianObject.GetComponentInChildren<ReligiosityBarScript>().ReligiosityPercent = Mathf.Lerp(0.0f, 0.5f, UnityEngine.Random.value);
             civilianObject.GetComponent<CivilianBehavior>().WanderSpeed = this.CiviliansWanderSpeed;
             civilianObject.GetComponentInChildren<BoxCollider>().isTrigger = true;
+            civilianObject.GetComponentInChildren<BoxCollider>().size.Set(civilianObject.GetComponentInChildren<BoxCollider>().size.x, civilianObject.GetComponentInChildren<BoxCollider>().size.y, 20f);
+           // Debug.Log("Setting the fucking thing to 20f");
 
             this.sortedCivilians.Add(civilianObject);
         }

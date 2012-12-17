@@ -30,6 +30,9 @@ public class CivilianBehavior : MonoBehaviour
 	void Start () 
     {
         this.previousCivilianLocation = this.gameObject.transform.position;
+
+      //  Debug.Log("Really setting the fucking thing to 20f");
+        this.GetComponentInChildren<BoxCollider>().size.Set(this.GetComponentInChildren<BoxCollider>().size.x, this.GetComponentInChildren<BoxCollider>().size.y, 20f);
 	}
 	
 	// Update is called once per frame

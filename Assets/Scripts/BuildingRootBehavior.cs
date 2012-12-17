@@ -44,11 +44,18 @@ public class BuildingRootBehavior : MonoBehaviour
             if (this.IsInfluenceEnabled)
             {
                 // Tick the religiosity
-                this.UpdateCivvieInfluences();
+                this.UpdateInfluencesOnCivilians();
+
+                // should be separate
+                if (this.CanBeInfluencedByCivilians)
+                {
+                    this.UpdateCivilianInfluencesOnBuilding();
+                }
 
                 this.stopWatch.Reset();
                 this.stopWatch.Start();
             }
+
         }
                 
 	}
@@ -68,17 +75,39 @@ public class BuildingRootBehavior : MonoBehaviour
         }
     }
 
-    private void UpdateCivvieInfluences()
+    private void UpdateInfluencesOnCivilians()
     {
         foreach (var civCollider in this.collidersInRange)
         {
             float religiosityChangePerSecond = Mathf.Lerp(this.MinInfluenceAmountPerSecond, this.MaxInfluenceAmountPerSecond, this.Religiosity);
             float secularChangePerSecond = Mathf.Lerp(this.MinInfluenceAmountPerSecond, this.MaxInfluenceAmountPerSecond, (1.0f - this.Religiosity));
-            civCollider.gameObject.transform.parent.GetComponent<CivilianBehavior>().Religiosity += (religiosityChangePerSecond * this.InfluenceTickIntervalSeconds);
+            float religGained = religiosityChangePerSecond * this.InfluenceTickIntervalSeconds;
+            civCollider.gameObject.transform.parent.GetComponent<CivilianBehavior>().Religiosity += (religGained);
 
-            civCollider.gameObject.transform.parent.GetComponent<LabelSpawnerBehaviorScript>().SpawnReligiosityGain(34.0f);
+            civCollider.gameObject.transform.parent.GetComponent<LabelSpawnerBehaviorScript>().SpawnReligiosityGain(religGained);
 
-            civCollider.gameObject.transform.parent.GetComponent<CivilianBehavior>().Religiosity -= (secularChangePerSecond * this.InfluenceTickIntervalSeconds);
+            float secularGained = secularChangePerSecond * this.InfluenceTickIntervalSeconds;
+            civCollider.gameObject.transform.parent.GetComponent<CivilianBehavior>().Religiosity -= (secularGained);
+
+            civCollider.gameObject.transform.parent.GetComponent<LabelSpawnerBehaviorScript>().SpawnSecularGain(secularGained);
+        }
+    }
+
+    private void UpdateCivilianInfluencesOnBuilding()
+    {
+        const float MaxInfluenceFromCiviliansPerSecond = 0.1f;
+
+        foreach (var civCollider in this.collidersInRange)
+        {
+            CivilianBehavior civBehavior = civCollider.gameObject.transform.parent.GetComponent<CivilianBehavior>();
+            float religiousInfluenceFromThisCivilian = Mathf.Lerp(0, MaxInfluenceFromCiviliansPerSecond, civBehavior.Religiosity);
+
+            float secularInfluenceFromThisCivilian = Mathf.Lerp(0, MaxInfluenceFromCiviliansPerSecond, (1.0f - civBehavior.Religiosity));
+
+            this.Religiosity += religiousInfluenceFromThisCivilian;
+          //  this.Religiosity -= secularInfluenceFromThisCivilian;
+
+
         }
     }
 
@@ -86,6 +115,7 @@ public class BuildingRootBehavior : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
+        //UnityEngine.Debug.Log("OnTriggerEnter: " + collider.name);
         if (collider.tag == "Civilian")
         {
             collidersInRange.Add(collider);
